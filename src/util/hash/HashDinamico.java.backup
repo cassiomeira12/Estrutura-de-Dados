@@ -1,0 +1,77 @@
+package com.util.hash;
+
+
+import com.util.lista.duplamente.ListaDEncadeada;
+
+
+public class HashDinamico {
+
+  private int tamanho;
+  private ListaDEncadeada vetor[];
+  private int size;
+
+
+  public HashDinamico(int tamanho) {
+    this.tamanho = tamanho;
+    vetor = new ListaDEncadeada[tamanho];
+    this.size = 0;
+  }
+
+  private int calcularIndiceDaTabela(int item) {
+    return Math.abs(item)%tamanho;
+  }
+
+  public void inserir(int item) {
+    this.verificarCarga();
+    int indice = calcularIndiceDaTabela(item);
+    if (this.vetor[indice] == null) {
+      this.vetor[indice] = new ListaDEncadeada();
+    }
+    this.vetor[indice].add(item);
+    this.size++;
+  }
+
+  public void remover(int item) {
+    int indice = calcularIndiceDaTabela(item);
+    this.vetor[indice].remove(item);
+    this.size--;
+    this.verificarCarga();
+  }
+
+  public void imprimir() {
+    for (int i=0; i<tamanho; i++) {
+      System.out.print("Posicao " + i + " ");
+      System.out.println(vetor[i]);
+    }
+  }
+
+  private void redimensionarVetor(int novaCapacidade) {
+    ListaDEncadeada temp[] = this.vetor;
+    int antigaCapacidade = this.tamanho;
+    this.tamanho = novaCapacidade;
+    this.size = 0;
+    this.vetor = new ListaDEncadeada[novaCapacidade];
+
+    for (int i=0; i<antigaCapacidade; i++) {
+      if (temp[i] != null) {
+        for (int j=0; j<temp[i].size(); j++) {
+          this.inserir((Integer)temp[i].get(j));
+        } 
+      }
+    }
+    
+  }
+
+  private void verificarCarga() {
+    int capacidade = this.tamanho;
+    double carga = (double) this.size / capacidade;
+
+    if (carga > 0.75) {
+      this.redimensionarVetor(capacidade*2);
+    } else if (carga < 0.25) {
+      //this.redimensionarVetor(Math.max(capacidade/2, 10));
+    }
+  }
+
+
+}

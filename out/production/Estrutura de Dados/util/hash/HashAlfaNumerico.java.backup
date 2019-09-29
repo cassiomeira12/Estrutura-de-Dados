@@ -1,0 +1,80 @@
+package com.util.hash;
+
+import com.util.lista.duplamente.ListaDEncadeada;
+
+public class HashAlfaNumerico {
+
+  private int tamanho;
+  private int size;
+  private ListaDEncadeada vetor[];
+
+
+  public HashAlfaNumerico(int tamanho) {
+    this.tamanho = tamanho;
+    vetor = new ListaDEncadeada[tamanho];
+    this.size = 0;
+  }
+
+  private int calcularIndiceDaTabela(int item) {
+    return Math.abs(item)%tamanho;
+  }
+
+  private int calcularIndiceDaTabela(String item) {
+    int indice = 1;
+    for (int i = 0; i < item.length(); i++) {
+      indice = indice + item.charAt(i);
+    }
+    return indice%tamanho;
+  }
+
+  public void inserir(int item) {
+    if (isEmpty()) {
+      System.out.println("O Hash está cheio");
+      return;
+    }
+    int indice = calcularIndiceDaTabela(item);
+    if (this.vetor[indice] == null) {
+      this.vetor[indice] = new ListaDEncadeada();
+    }
+    this.vetor[indice].add(item);
+    this.size++;
+  }
+
+  public void inserir(String item) {
+    if (isEmpty()) {
+      System.out.println("O Hash está cheio");
+      return;
+    }
+    int indice = calcularIndiceDaTabela(item);
+    if (this.vetor[indice] == null) {
+      this.vetor[indice] = new ListaDEncadeada();
+    }
+    this.vetor[indice].add(item);
+    this.size++;
+  }
+
+  public void remover(int item) {
+    int indice = calcularIndiceDaTabela(item);
+    this.vetor[indice].remove(item);
+    this.size--;
+  }
+
+  public void remover(String item) {
+    int indice = calcularIndiceDaTabela(item);
+    this.vetor[indice].remove(item);
+    this.size--;
+  }
+
+  public boolean isEmpty() {
+    return size == tamanho;
+  }
+
+  public void imprimir() {
+    for (int i=0; i<tamanho; i++) {
+      System.out.print("Posicao " + i + " ");
+      System.out.println(vetor[i]);
+    }
+  }
+
+
+}
